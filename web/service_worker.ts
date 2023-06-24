@@ -6,7 +6,7 @@ import { simpleHash } from "../common/crypto.ts";
 
 const CACHE_NAME = "{{CACHE_NAME}}";
 
-const precacheFiles = Object.fromEntries([
+const precacheFiles: { [key: string]: string } = Object.fromEntries([
   "/",
   "/.client/logout.html",
   "/.client/client.js",
@@ -30,7 +30,11 @@ self.addEventListener("install", (event: any) => {
           "[Service worker]",
           "Now pre-caching client files",
         );
-        return cache.addAll(Object.values(precacheFiles)).then(() => {
+        return cache.addAll(
+          Object.values(precacheFiles).map((url) =>
+            new Request(url, { credentials: "same-origin" })
+          ),
+        ).then(() => {
           console.log(
             "[Service worker]",
             Object.keys(precacheFiles).length,
