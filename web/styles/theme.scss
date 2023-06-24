@@ -9,12 +9,19 @@
   font-family: var(--ui-font);
 }
 
+body {
+  // colors IOS status bar
+  // FIXME: this breaks when in dark mode
+  background-color: #e1e1e1;  
+}
+
 #sb-top {
   background-color: #e1e1e1;
   border-bottom: #cacaca 1px solid;
 }
 
 #sb-top.sb-sync-error {
+  // FIXME: this doesn't update the IOS status bar color
   background-color: #fdf8cb;
 }
 
@@ -124,6 +131,8 @@
 /* Editor */
 
 #sb-editor {
+  // needed since body color is set to match top bar color.
+  background-color: #fff;
 
   .cm-content {
     font-family: var(--editor-font);
