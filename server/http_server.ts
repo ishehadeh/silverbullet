@@ -9,6 +9,7 @@ import { gitIgnoreCompiler } from "./deps.ts";
 import { FilteredSpacePrimitives } from "../common/spaces/filtered_space_primitives.ts";
 import { CollabServer } from "./collab.ts";
 import { Authenticator } from "./auth.ts";
+import { ICollabServer } from "./collab/collab.ts";
 
 export type ServerOptions = {
   hostname: string;
@@ -30,7 +31,7 @@ export class HttpServer {
   clientAssetBundle: AssetBundle;
   settings?: BuiltinSettings;
   spacePrimitives: SpacePrimitives;
-  collab: CollabServer;
+  collab: ICollabServer;
   authenticator: Authenticator;
 
   constructor(
