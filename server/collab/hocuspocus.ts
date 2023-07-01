@@ -5,6 +5,7 @@ import { Application } from "./../deps.ts";
 import { SpacePrimitives } from "../../common/spaces/space_primitives.ts";
 import { collabPingInterval } from "../../plugs/collab/constants.ts";
 import { Hocuspocus } from "npm:@hocuspocus/server@2.1.0";
+import { PresenceUpdateResponse } from "./collab.ts";
 
 type CollabPage = {
   clients: Map<string, number>; // clientId -> lastPing
@@ -31,7 +32,7 @@ export class HocuspocusCollabServer {
     clientId: string,
     currentPage?: string,
     previousPage?: string,
-  ): { collabId?: string } {
+  ): PresenceUpdateResponse {
     if (previousPage && currentPage !== previousPage) {
       // Client switched pages
       // Update last page record
