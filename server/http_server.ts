@@ -7,9 +7,10 @@ import { performLocalFetch } from "../common/proxy_fetch.ts";
 import { BuiltinSettings } from "../web/types.ts";
 import { gitIgnoreCompiler } from "./deps.ts";
 import { FilteredSpacePrimitives } from "../common/spaces/filtered_space_primitives.ts";
-import { HocuspocusCollabServer } from "./collab/hocuspocus.ts";
 import { Authenticator } from "./auth.ts";
 import { ICollabServer } from "./collab/collab.ts";
+import { HocuspocusCollabServer } from "./collab/hocuspocus.ts";
+import { NoOpCollabServer } from "./collab/noop.ts";
 
 export type ServerOptions = {
   hostname: string;
@@ -21,6 +22,7 @@ export type ServerOptions = {
   certFile?: string;
   keyFile?: string;
   maxFileSizeMB?: number;
+  collab?: boolean;
 };
 
 export class HttpServer {
@@ -66,7 +68,13 @@ export class HttpServer {
         }
       },
     );
-    this.collab = new HocuspocusCollabServer(this.spacePrimitives);
+
+    if (options.collab !== false) {
+      this.collab = new HocuspocusCollabServer(this.spacePrimitives);
+    } else {
+      console.log("1");
+      this.collab = new NoOpCollabServer();
+    }
     this.collab.start();
   }
 
