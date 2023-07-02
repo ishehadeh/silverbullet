@@ -9,7 +9,6 @@ import { gitIgnoreCompiler } from "./deps.ts";
 import { FilteredSpacePrimitives } from "../common/spaces/filtered_space_primitives.ts";
 import { Authenticator } from "./auth.ts";
 import { ICollabServer } from "./collab/collab.ts";
-import { HocuspocusCollabServer } from "./collab/hocuspocus.ts";
 import { NoOpCollabServer } from "./collab/noop.ts";
 
 export type ServerOptions = {
@@ -69,12 +68,20 @@ export class HttpServer {
       },
     );
 
-    if (options.collab !== false) {
+    // set the collab server to do nothing, until `initCollabServer` is called
+    this.collab = new NoOpCollabServer();
+  }
+
+  /** Load and start the collab server
+   *
+   * NOTE: this may dynamically load the collab server module, which *could* download dependencies.
+   */
+  async initCollabServer(): Promise<void> {
+    if (this.options.collab !== false) {
+      const { HocuspocusCollabServer } = await import("./collab/hocuspocus.ts");
       this.collab = new HocuspocusCollabServer(this.spacePrimitives);
-    } else {
-      console.log("1");
-      this.collab = new NoOpCollabServer();
     }
+
     this.collab.start();
   }
 
@@ -91,6 +98,7 @@ export class HttpServer {
   }
 
   async start() {
+    await this.initCollabServer();
     await this.reloadSettings();
     // Serve static files (javascript, css, html)
     this.app.use(async ({ request, response }, next) => {
