@@ -1,0 +1,27 @@
+name: Deploy
+on:
+  push:
+    branches: feature/no-collab
+  pull_request:
+    branches: feature/no-collab
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v3
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.34
+      - name: Run build
+        run: deno task build
+      - name: Bundle
+        run: deno task bundle
+      - name: Upload to Deno Deploy
+        uses: denoland/deployctl@v1
+        with:
+          project: "sweet-chicken-10"
+          entrypoint: "silverbullet.ts"
+          root: "."
