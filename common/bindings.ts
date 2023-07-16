@@ -21,9 +21,12 @@ import { SyntaxNode, SyntaxNodeRef } from "./deps.ts";
 /// By Node
 /// ------------
 /// General way to match a binding. `node` and all of its decendants with paths matching pattern `syntaxPattern` are the binding's value.
-type BindingLocation = { index: number } | { node: SyntaxNodeRef };
+export type BindingLocation = { index: number; node: undefined } | {
+  node: SyntaxNodeRef;
+  index: undefined;
+};
 
-type Binding = {
+export type Binding = {
   location: BindingLocation;
 
   objectSourceName: string;
@@ -56,7 +59,7 @@ export function findAndClearBindings(
       // index is the index of the binding *after* preprocessing
       // since all prior bindings have been removed
       bindings.push({
-        location: { index: binding.index! },
+        location: { index: binding.index!, node: undefined },
         objectSourceName: objectPathMatch[1],
         objectID: objectPathMatch[2],
         objectPropertyPath: objectPathMatch[3],
@@ -71,12 +74,4 @@ export function findAndClearBindings(
   }
 
   return [newDoc, bindings];
-}
-
-export class BindingStore {
-  bindings: Binding[];
-
-  constructor(bindings: Binding[]) {
-    this.bindings = bindings;
-  }
 }
