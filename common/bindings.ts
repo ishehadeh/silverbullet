@@ -1,29 +1,8 @@
 import { globToRegExp } from "https://deno.land/std@0.189.0/path/glob.ts";
-import { SyntaxNode, SyntaxNodeRef } from "./deps.ts";
 
-// testing out binding syntax:
-//
-// ```markdown
-// - [ ] $[task:{{id}}.name ./!DueDate/**]
-// ```
-// This means “bind the name property of the object with ID {{id}} from the ‘task’ data source to the value of the current syntax node,
-// and decendants (`**`), not including ‘DueDate’ syntax nodes.”
-
-/// 2 ways to identify a binding's location:
-///
-/// By Index
-/// ------------
-/// Not ideal, should be used as briefly as possible to get the syntax node ref.
-/// Used When:
-///  - initially, before the document has been parsed.
-///  - The syntax node has been deleted (index is set to the syntax node's last index), [TODO: would this work right?]
-///
-/// By Node
-/// ------------
-/// General way to match a binding. `node` and all of its decendants with paths matching pattern `syntaxPattern` are the binding's value.
-export type BindingLocation = { index: number; node: undefined } | {
-  node: SyntaxNodeRef;
-  index: undefined;
+export type BindingLocation = {
+  start: number;
+  end: number;
 };
 
 export type Binding = {
@@ -43,7 +22,7 @@ export function findAndClearBindings(
   const BINDING_RE = /(?<!\\)\$\[([^\]]+)\]/gu;
   const BINDING_PATH_RE = /([a-z_][a-z0-9_]*):(\d+)(\.[a-z_][a-z0-9_]*)+/iu;
 
-  const bindings = [];
+  const bindings: Binding[] = [];
   let newDoc = doc;
   let binding = null;
   while ((binding = BINDING_RE.exec(newDoc)) !== null) {
@@ -59,7 +38,7 @@ export function findAndClearBindings(
       // index is the index of the binding *after* preprocessing
       // since all prior bindings have been removed
       bindings.push({
-        location: { index: binding.index!, node: undefined },
+        location: { start: binding.index!, end: binding.index! },
         objectSourceName: objectPathMatch[1],
         objectID: objectPathMatch[2],
         objectPropertyPath: objectPathMatch[3],
