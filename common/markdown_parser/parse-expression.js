@@ -2,15 +2,15 @@
 import {LRParser} from "@lezer/lr"
 export const parser = LRParser.deserialize({
   version: 14,
-  states: "hOVQPOOOOQO'#C_'#C_OOQO'#C^'#C^QOQPOO",
-  stateData: "h~OYOS~OSPOTPOUPOVPO~OTS~",
-  goto: "ZSPPTWRRORQO",
-  nodeNames: "⚠ Program Expr Value Name Bool String Number",
-  maxTerm: 10,
+  states: "!QOVQPOOOOQO'#Cl'#ClQhQQOOOOQO'#Ck'#CkOVQPO,58}OVQPO,58}OOQO1G.i1G.iOvQQO1G.i",
+  stateData: "!^~O^OS~OQPORPOSPOTPOUPO~OWSOXSOYTOZTO~OWSOXSOYViZVi[Vi~OQTUT~",
+  goto: "paPPPPPPPbPPPPPPPgbVROSTQQOQUSRVT",
+  nodeNames: "⚠ Program Bool String Number Null Name InfixExpr OpMul OpDiv OpSub OpAdd",
+  maxTerm: 16,
   skippedNodes: [0],
   repeatNodeCount: 0,
-  tokenData: "'}~RfX^!gpq!grs#[}!O$S!Q![$e!c!}$S#R#S$S#T#Y$S#Y#Z$m#Z#h$S#h#i&}#i#o$S#y#z!g$f$g!g#BY#BZ!g$IS$I_!g$Ip$Iq#[$Iq$Ir#[$I|$JO!g$JT$JU!g$KV$KW!g&FU&FV!g~!lYY~X^!gpq!g#y#z!g$f$g!g#BY#BZ!g$IS$I_!g$I|$JO!g$JT$JU!g$KV$KW!g&FU&FV!g~#_WOr#[rs#ws$Ip#[$Ip$Iq#w$Iq$Ir#w$Ir;'S#[;'S;=`#|<%lO#[~#|OU~~$PP;=`<%l#[~$XSS~}!O$S!c!}$S#R#S$S#T#o$S~$jPV~!Q![$e~$rTS~}!O$S!c!}$S#R#S$S#T#U%R#U#o$S~%WUS~}!O$S!c!}$S#R#S$S#T#`$S#`#a%j#a#o$S~%oUS~}!O$S!c!}$S#R#S$S#T#g$S#g#h&R#h#o$S~&WUS~}!O$S!c!}$S#R#S$S#T#X$S#X#Y&j#Y#o$S~&qST~S~}!O$S!c!}$S#R#S$S#T#o$S~'SUS~}!O$S!c!}$S#R#S$S#T#f$S#f#g'f#g#o$S~'kUS~}!O$S!c!}$S#R#S$S#T#i$S#i#j&R#j#o$S",
-  tokenizers: [0],
+  tokenData: "*|~RkX^!vpq!vrs#kz{$c{|$h}!O$m!P!Q%c!Q![%h!c!}%Q#R#S%Q#T#Y%Q#Y#Z%p#Z#b%Q#b#c(Q#c#h%Q#h#i)|#i#o%Q#y#z!v$f$g!v#BY#BZ!v$IS$I_!v$Ip$Iq#k$Iq$Ir#k$I|$JO!v$JT$JU!v$KV$KW!v&FU&FV!v~!{Y^~X^!vpq!v#y#z!v$f$g!v#BY#BZ!v$IS$I_!v$I|$JO!v$JT$JU!v$KV$KW!v&FU&FV!v~#nWOr#krs$Ws$Ip#k$Ip$Iq$W$Iq$Ir$W$Ir;'S#k;'S;=`$]<%lO#k~$]OR~~$`P;=`<%l#k~$hOW~~$mOZ~R$tSYQUP}!O%Q!c!}%Q#R#S%Q#T#o%QP%VSUP}!O%Q!c!}%Q#R#S%Q#T#o%Q~%hOX~~%mPS~!Q![%h~%uTUP}!O%Q!c!}%Q#R#S%Q#T#U&U#U#o%Q~&ZUUP}!O%Q!c!}%Q#R#S%Q#T#`%Q#`#a&m#a#o%Q~&rUUP}!O%Q!c!}%Q#R#S%Q#T#g%Q#g#h'U#h#o%Q~'ZUUP}!O%Q!c!}%Q#R#S%Q#T#X%Q#X#Y'm#Y#o%Q~'tSQ~UP}!O%Q!c!}%Q#R#S%Q#T#o%Q~(VUUP}!O%Q!c!}%Q#R#S%Q#T#i%Q#i#j(i#j#o%Q~(nUUP}!O%Q!c!}%Q#R#S%Q#T#`%Q#`#a)Q#a#o%Q~)VUUP}!O%Q!c!}%Q#R#S%Q#T#`%Q#`#a)i#a#o%Q~)pST~UP}!O%Q!c!}%Q#R#S%Q#T#o%Q~*RUUP}!O%Q!c!}%Q#R#S%Q#T#f%Q#f#g*e#g#o%Q~*jUUP}!O%Q!c!}%Q#R#S%Q#T#i%Q#i#j'U#j#o%Q",
+  tokenizers: [0, 1],
   topRules: {"Program":[0,1]},
-  tokenPrec: 21
+  tokenPrec: 55
 })

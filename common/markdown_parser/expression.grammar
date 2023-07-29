@@ -1,11 +1,16 @@
-@precedence { logic @left }
-@top Program { Expr }
+@precedence { mul @left, add @left }
+@top Program { expr }
 @skip { space }
 
-Expr { Value }
+expr { value | InfixExpr }
 
-Value {
-    Name | Bool | String | Number
+value { Bool | String | Number | Null | Name }
+
+InfixExpr {
+  expr !mul OpMul expr |
+  expr !mul OpDiv expr |
+  expr !add OpSub expr |
+  expr !add OpAdd expr
 }
 
 @tokens {
@@ -22,6 +27,11 @@ Value {
   Number { std.digit+ }
 
   Name { (std.asciiLetter | "-" | "_")+ }
+
+  OpAdd { "+" }
+  OpSub { "-" }
+  OpMul { "*" }
+  OpDiv { "/" }
 
   @precedence { Bool, Null, Name }
 }
