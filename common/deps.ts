@@ -23,6 +23,7 @@ export { readAll } from "https://deno.land/std@0.165.0/streams/conversion.ts";
 export type {
   BlockContext,
   Element,
+  InlineContext,
   LeafBlock,
   LeafBlockParser,
   Line,

@@ -1,0 +1,27 @@
+@precedence { logic @left }
+@top Program { Expr }
+@skip { space }
+
+Expr { Value }
+
+Value {
+    Name | Bool | String | Number
+}
+
+@tokens {
+  space { std.whitespace+ }
+
+  Null { "null" }
+
+  Bool { "true" | "false" }
+
+  String {
+    ("\"" | "“" | "”") ![\"”“]* ("\"" | "“" | "”")
+  }
+
+  Number { std.digit+ }
+
+  Name { (std.asciiLetter | "-" | "_")+ }
+
+  @precedence { Bool, Null, Name }
+}

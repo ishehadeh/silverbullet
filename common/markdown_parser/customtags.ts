@@ -22,3 +22,7 @@ export const DirectiveProgramTag = Tag.define();
 export const AttributeTag = Tag.define();
 export const AttributeNameTag = Tag.define();
 export const AttributeValueTag = Tag.define();
+
+export const BindingTag = Tag.define();
+export const BindingExpressionTag = Tag.define();
+export const BindingValueTag = Tag.define();

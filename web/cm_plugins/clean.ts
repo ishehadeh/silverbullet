@@ -13,6 +13,7 @@ import { taskListPlugin } from "./task.ts";
 import { cleanWikiLinkPlugin } from "./wiki_link.ts";
 import { cleanCommandLinkPlugin } from "./command_link.ts";
 import { fencedCodePlugin } from "./fenced_code.ts";
+import { bindingPlugin } from "./binding.ts";
 
 export function cleanModePlugins(editor: Client) {
   return [
@@ -24,6 +25,7 @@ export function cleanModePlugins(editor: Client) {
     hideHeaderMarkPlugin(),
     cleanBlockPlugin(),
     fencedCodePlugin(editor),
+    bindingPlugin(),
     taskListPlugin({
       // TODO: Move this logic elsewhere?
       onCheckboxClick: (pos) => {

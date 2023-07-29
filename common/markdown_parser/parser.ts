@@ -13,6 +13,7 @@ import {
   TaskList,
   yamlLanguage,
 } from "../deps.ts";
+import { Binding } from "./binding_parser.ts";
 import * as ct from "./customtags.ts";
 import {
   MDExt,
@@ -426,6 +427,7 @@ export default function buildMarkdown(mdExtensions: MDExt[]): Language {
       Highlight,
       Strikethrough,
       Table,
+      Binding,
       ...mdExtensions.map(mdExtensionSyntaxConfig),
 
       {

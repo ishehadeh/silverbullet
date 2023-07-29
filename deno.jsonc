@@ -16,7 +16,7 @@
     "bundle": "deno run -A build_bundle.ts",
     // Regenerates some bundle files (checked into the repo)
     // Install lezer-generator with "npm install -g @lezer/generator"
-    "generate": "lezer-generator common/markdown_parser/query.grammar -o common/markdown_parser/parse-query.js",
+    "generate": "lezer-generator common/markdown_parser/query.grammar -o common/markdown_parser/parse-query.js && lezer-generator common/markdown_parser/expression.grammar -o common/markdown_parser/parse-expression.js",
 
     // Compile
     "compile": "deno task bundle && deno compile -A -o silverbullet dist/silverbullet.js",
@@ -33,10 +33,7 @@
   },
   "importMap": "import_map.json",
   "lint": {
-    "exclude": [
-      "dist",
-      "dist_bundle"
-    ],
+    "exclude": ["dist", "dist_bundle"],
     "rules": {
       "exclude": ["no-explicit-any"]
     }
