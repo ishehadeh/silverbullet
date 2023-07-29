@@ -8,4 +8,5 @@ export const builtinPlugNames = [
   "tasks",
   "search",
   "federation",
+  "bindings",
 ];

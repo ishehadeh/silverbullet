@@ -1,0 +1,9 @@
+name: bindings
+functions:
+  updateBindingsOnPage:
+    path: ./command.ts:updateBindingsOnPage
+    command:
+      name: "Bindings: Update"
+      key: "Alt-b"
+    events:
+      - editor:pageLoaded
