@@ -1,29 +1,14 @@
 import {
-  BlockContext,
   InlineContext,
-  Language,
-  LeafBlock,
-  LeafBlockParser,
-  Line,
-  markdown,
   MarkdownConfig,
-  StreamLanguage,
-  Strikethrough,
   styleTags,
   tags as t,
-  TaskList,
-  yamlLanguage,
 } from "../deps.ts";
 import {
   BindingExpressionTag,
   BindingTag,
   BindingValueTag,
 } from "./customtags.ts";
-import {
-  MDExt,
-  mdExtensionStyleTags,
-  mdExtensionSyntaxConfig,
-} from "./markdown_ext.ts";
 
 import { parser as expressionParser } from "./parse-expression.js";
 
