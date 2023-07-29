@@ -41,12 +41,13 @@ const EXPRESSION_PARSER = expressionParser.configure({
 
 const START_CHAR = "$".charCodeAt(0);
 const VALUE_START_CHAR = "(".charCodeAt(0);
+const VALUE_END_CHAR = ")".charCodeAt(0);
 const EXPR_END_CHAR = "]".charCodeAt(0);
+const ESCAPE_CHAR = "\\".charCodeAt(0);
 
 function findExprEnd(cx: InlineContext, start: number): number | null {
   let inStr = false;
   let esc = false;
-  const escChar = "\\".charCodeAt(0);
   const strStart = ['"'.charCodeAt(0), "“".charCodeAt(0), "”".charCodeAt(0)];
   const strEnd = ['"'.charCodeAt(0), "“".charCodeAt(0), "”".charCodeAt(0)];
   for (let i = start; i < cx.end; ++i) {
@@ -58,7 +59,7 @@ function findExprEnd(cx: InlineContext, start: number): number | null {
 
     const c = cx.char(i);
 
-    if (c == escChar) {
+    if (c == ESCAPE_CHAR) {
       esc = true;
     } else if (inStr) {
       if (strEnd.includes(c)) {
@@ -70,6 +71,39 @@ function findExprEnd(cx: InlineContext, start: number): number | null {
       }
 
       if (c == EXPR_END_CHAR) return i;
+    }
+  }
+
+  return null;
+}
+
+function findValueEndChar(cx: InlineContext, start: number): number | null {
+  // this allows nesting "( )" inside values
+  // I'm not sure how intuitive this is, I think its nice for english text strings
+  // but not sure
+  // TODO: revaluate ^
+
+  let nested = 0;
+  let esc = false;
+  for (let i = start; i < cx.end; ++i) {
+    if (esc) {
+      // skip escape chars
+      esc = false;
+      continue;
+    }
+
+    const c = cx.char(i);
+
+    if (c == ESCAPE_CHAR) {
+      esc = true;
+    } else if (nested == 0 && c == VALUE_END_CHAR) {
+      return i;
+    } else {
+      if (c == VALUE_START_CHAR) {
+        nested += 1;
+      } else if (c == VALUE_END_CHAR) {
+        nested -= 1;
+      }
     }
   }
 
@@ -91,7 +125,7 @@ function parse(cx: InlineContext, next: number, pos: number): number {
   if (!exprValueSplitToken) {
     return -1;
   }
-  const exprEndPos = pos + exprValueSplitToken;
+  const exprEndPos = exprValueSplitToken;
   let endPos = exprEndPos;
 
   const exprParseTree = EXPRESSION_PARSER.parse(
@@ -110,12 +144,10 @@ function parse(cx: InlineContext, next: number, pos: number): number {
     elts.push(cx.elt("BindingMark", valueStartPos, valueStartPos + 1));
 
     // find the ending ")"
-    // TODO: better way to do this
-    const endTokenOffset = cx.slice(valueStartPos, cx.end).lastIndexOf(")");
+    const valueEndPos = findValueEndChar(cx, valueStartPos + 1);
 
     //  keep parsing the expression even without ")" to get syntax highlighting ASAP
-    if (endTokenOffset !== -1) {
-      const valueEndPos = valueStartPos + endTokenOffset;
+    if (valueEndPos != null) {
       elts.push(cx.elt("BindingValue", valueStartPos + 1, valueEndPos));
       elts.push(cx.elt("BindingMark", valueEndPos, valueEndPos + 1));
       endPos = valueEndPos + 1;
