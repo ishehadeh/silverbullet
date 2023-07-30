@@ -7,3 +7,4 @@ functions:
       key: "Alt-b"
     events:
       - editor:pageLoaded
+      - editor:pageSaved
