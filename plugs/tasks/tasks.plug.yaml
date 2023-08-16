@@ -27,6 +27,15 @@ functions:
       match: "^(\\s*)[\\-\\*]?\\s*(\\[[ xX]\\])?\\s*"
       replace: "$1* [ ] "
 
+  onPageModified:
+    path: "./task.ts:onPageModified"
+    events:
+      - editor:pageModified
+  
+  onTaskStatusChanged:
+    path: "./task.ts:onTaskStatusChanged"
+    events: [ task:statusChanged ]
+
   indexTasks:
     path: "./task.ts:indexTasks"
     events:

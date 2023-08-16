@@ -1,6 +1,7 @@
 import type {
   ClickEvent,
   IndexTreeEvent,
+  PageModifiedEvent,
   QueryProviderEvent,
 } from "$sb/app_event.ts";
 
@@ -16,6 +17,7 @@ import {
   addParentPointers,
   collectNodesMatching,
   findNodeOfType,
+  findParentMatching,
   nodeAtPos,
   ParseTree,
   renderToText,
@@ -27,6 +29,7 @@ import { niceDate } from "$sb/lib/dates.ts";
 import { extractAttributes } from "$sb/lib/attribute.ts";
 import { rewritePageRefs } from "$sb/lib/resolve.ts";
 import { indexAttributes } from "../core/attributes.ts";
+import { events } from "$sb/plugos-syscall/mod.ts";
 
 export type Task = {
   name: string;
@@ -259,4 +262,42 @@ export async function queryProvider({
     });
   }
   return applyQuery(query, allTasks);
+}
+
+export async function onPageModified(ev: PageModifiedEvent) {
+  const TASK_STATUS_MARKER_RE = /[x ]/g;
+
+  let doc: string | null = null;
+  let tree: ParseTree | null = null;
+
+  for (const change of ev.changes) {
+    const taskStatusMarker = TASK_STATUS_MARKER_RE.exec(change.inserted)
+    if (!taskStatusMarker) continue;
+    
+    if (!doc) {
+      doc = await editor.getText()
+    }
+    const taskStatusMarkerPos = change.newRange.from + taskStatusMarker.index;
+    if(doc.at(taskStatusMarkerPos + 1) == ']' && doc.slice(taskStatusMarkerPos - 3, taskStatusMarkerPos) == "- [") {
+      if (!tree) {
+        tree = await markdown.parseMarkdown(doc)
+        addParentPointers(tree);
+      }
+      const statusNode = nodeAtPos(tree, taskStatusMarkerPos);
+      if (statusNode) {
+        const taskNode = findParentMatching(statusNode, (p) => p.type == "Task");
+        if (taskNode) {
+          const eventPayload = {
+            task: 'task:' + taskNode.from,
+            completed: taskStatusMarker[0] === 'x'
+          }
+          events.dispatchEvent("task:statusChanged", eventPayload);
+        }
+      }
+    }
+  }
+}
+
+export function onTaskStatusChanged(ev: { task: string, completed: boolean }) {
+  console.log(ev);
 }
